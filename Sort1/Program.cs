@@ -6,32 +6,41 @@ int[] A, copyA;
 copyA = new int[2];
 A = new int[2];
 
+
 stopWatch = new Stopwatch();
 
-for (int i = 1_000_000; i < 1_000_001; i *= 10) { 
+for (int i = 10; i < 100_001; i *= 10) { 
     copyA = createRandomArr(i);
     A = new int[copyA.Length];
     Console.WriteLine();
+
+    StartStat();
+    HeapSort(A);
+    EndStat("HeapSort", i);
+
+    StartStat();
+    SelectionSort(A);
+    EndStat("SelectionSort", i);
 
     StartStat();
     ShellSort(A);
     EndStat("ShellSort", i);
 
     StartStat();
-    InsertionShiftLogSort(A);
-    EndStat("InsertionShiftLogSort", i);
-
-    StartStat();
-    InsertionShiftSort(A);
-    EndStat("InsertionShiftSort", i);
+    BubbleSort(A);
+    EndStat("BubbleSort", i);
 
     StartStat();
     InsertionSort(A);
     EndStat("InsertionSort", i);
 
     StartStat();
-    BubbleSort(A);
-    EndStat("BubbleSort", i);
+    InsertionShiftSort(A);
+    EndStat("InsertionShiftSort", i);
+
+    StartStat();
+    InsertionShiftLogSort(A);
+    EndStat("InsertionShiftLogSort", i);
 
 }
 
@@ -49,6 +58,18 @@ swap(ref copyA[N / 3], ref copyA[2 * N / 3]);
     Console.WriteLine("---- Почти отсортированный массив ----");
 
     StartStat();
+    HeapSort(A);
+    EndStat("HeapSort", N);
+
+    StartStat();
+    SelectionSort(A);
+    EndStat("SelectionSort", N);
+
+    StartStat();
+    ShellSort(A);
+    EndStat("ShellSort", N);
+
+    StartStat();
     BubbleSort(A);
     EndStat("BubbleSort", N);
 
@@ -63,17 +84,13 @@ swap(ref copyA[N / 3], ref copyA[2 * N / 3]);
     StartStat();
     InsertionShiftLogSort(A);
     EndStat("InsertionShiftLogSort", N);
-
-    StartStat();
-    ShellSort(A);
-    EndStat("ShellSort", N);
-
 }
 
 for(int i = 0; i < N/2; i++)
 {
     swap(ref A[i], ref A[N - i - 1]);   
 }
+
 for (int i = 0; i < N; i++)
 {
     copyA[i] = A[i];
@@ -84,6 +101,18 @@ for (int i = 0; i < N; i++)
     Console.WriteLine("---- Обратно отсортированный массив ----");
 
     StartStat();
+    HeapSort(A);
+    EndStat("HeapSort", N);
+
+    StartStat();
+    SelectionSort(A);
+    EndStat("SelectionSort", N);
+
+    StartStat();
+    ShellSort(A);
+    EndStat("ShellSort", N);
+
+    StartStat();
     BubbleSort(A);
     EndStat("BubbleSort", N);
 
@@ -98,13 +127,45 @@ for (int i = 0; i < N; i++)
     StartStat();
     InsertionShiftLogSort(A);
     EndStat("InsertionShiftLogSort", N);
+}
 
-    StartStat();
-    ShellSort(A);
-    EndStat("ShellSort", N);
+void HeapSort(int[] arr)
+{
+    for (int i = arr.Length / 2 - 1; i >= 0; i--)
+        heapify(arr, i, arr.Length);
+
+    for(int j=arr.Length - 1; j >= 0; j--)
+    {
+        swap(ref arr[j], ref arr[0]);
+        heapify(arr, 0, j);
+    }
 
 }
 
+void heapify(int[] arr, int root, int N)
+{
+    int L = 2 * root + 1;
+    int R = 2 * root + 2;
+    int P = root / 2 - 1;
+    int X = root;
+    if (L < N && cmp(arr[L], arr[X])) X = L;
+    if (R < N && cmp(arr[R], arr[X])) X = R;
+    if (X == root) return;
+    swap(ref arr[X], ref arr[root]);
+    heapify(arr, X, N);
+
+}
+
+void SelectionSort(int[] arr)
+{
+    int N=arr.Length;
+    int maxIndex = findMaxIndex(arr, N);
+    for(int i=N-1; i > 0; i--)
+    {
+        swap(ref arr[i], ref arr[maxIndex]);
+        maxIndex = findMaxIndex(arr, i);
+    }
+}
 
 void ShellSort(int[] arr)
 {
@@ -175,6 +236,14 @@ void InsertionShiftLogSort(int[] arr)
         assign++;
         arr[j + 1] = k;
     }
+}
+
+int findMaxIndex(int[] arr, int N)
+{
+    int res = 0;
+    for (int i = 0; i < N; i++)
+        if (cmp(arr[i], arr[res])) res = i;
+    return res;
 }
 
 int binarySearch(int[] arr, int key, int low, int high)
