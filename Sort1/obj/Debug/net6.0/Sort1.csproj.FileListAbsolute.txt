@@ -1,0 +1,15 @@
+C:\Users\ibaikov\source\repos\Sort1\Sort1\bin\Debug\net6.0\Sort1.exe
+C:\Users\ibaikov\source\repos\Sort1\Sort1\bin\Debug\net6.0\Sort1.deps.json
+C:\Users\ibaikov\source\repos\Sort1\Sort1\bin\Debug\net6.0\Sort1.runtimeconfig.json
+C:\Users\ibaikov\source\repos\Sort1\Sort1\bin\Debug\net6.0\Sort1.dll
+C:\Users\ibaikov\source\repos\Sort1\Sort1\bin\Debug\net6.0\Sort1.pdb
+C:\Users\ibaikov\source\repos\Sort1\Sort1\obj\Debug\net6.0\Sort1.csproj.AssemblyReference.cache
+C:\Users\ibaikov\source\repos\Sort1\Sort1\obj\Debug\net6.0\Sort1.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ibaikov\source\repos\Sort1\Sort1\obj\Debug\net6.0\Sort1.AssemblyInfoInputs.cache
+C:\Users\ibaikov\source\repos\Sort1\Sort1\obj\Debug\net6.0\Sort1.AssemblyInfo.cs
+C:\Users\ibaikov\source\repos\Sort1\Sort1\obj\Debug\net6.0\Sort1.csproj.CoreCompileInputs.cache
+C:\Users\ibaikov\source\repos\Sort1\Sort1\obj\Debug\net6.0\Sort1.dll
+C:\Users\ibaikov\source\repos\Sort1\Sort1\obj\Debug\net6.0\refint\Sort1.dll
+C:\Users\ibaikov\source\repos\Sort1\Sort1\obj\Debug\net6.0\Sort1.pdb
+C:\Users\ibaikov\source\repos\Sort1\Sort1\obj\Debug\net6.0\Sort1.genruntimeconfig.cache
+C:\Users\ibaikov\source\repos\Sort1\Sort1\obj\Debug\net6.0\ref\Sort1.dll
