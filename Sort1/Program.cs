@@ -1,134 +1,139 @@
 ﻿using System.Diagnostics;
 Stopwatch stopWatch;
 ulong rel=0, assign=0;
-
 int[] A, copyA;
+// в целях отладки можно вывести результирующий массив
+bool printArray = false;
+
 copyA = new int[2];
 A = new int[2];
-
 
 stopWatch = new Stopwatch();
 
 for (int i = 10; i < 100_001; i *= 10) { 
     copyA = createRandomArr(i);
     A = new int[copyA.Length];
+    AllSort(A, i);
     Console.WriteLine();
-
-    StartStat();
-    HeapSort(A);
-    EndStat("HeapSort", i);
-
-    StartStat();
-    SelectionSort(A);
-    EndStat("SelectionSort", i);
-
-    StartStat();
-    ShellSort(A);
-    EndStat("ShellSort", i);
-
-    StartStat();
-    BubbleSort(A);
-    EndStat("BubbleSort", i);
-
-    StartStat();
-    InsertionSort(A);
-    EndStat("InsertionSort", i);
-
-    StartStat();
-    InsertionShiftSort(A);
-    EndStat("InsertionShiftSort", i);
-
-    StartStat();
-    InsertionShiftLogSort(A);
-    EndStat("InsertionShiftLogSort", i);
-
 }
 
 int N = copyA.Length;
 // сохраним отсортированный массив
-for (int i = 0; i < N; i++)
-{
-    copyA[i] = A[i];
-}
+for (int i = 0; i < N; i++) copyA[i] = A[i];
 
 swap(ref copyA[N / 3], ref copyA[2 * N / 3]);
+Console.WriteLine("---- Почти отсортированный массив ----");
+AllSort(A, N);
 
+for(int i = 0; i < N/2; i++) swap(ref A[i], ref A[N - i - 1]);   
+
+for (int i = 0; i < N; i++) copyA[i] = A[i];
+
+Console.WriteLine("---- Обратно отсортированный массив ----");
+AllSort(A, N);
+
+void QuickSort(int L, int R)
 {
-    A = new int[N];
-    Console.WriteLine("---- Почти отсортированный массив ----");
+    int m = L-1;
+    int P;
+    int[] arr = A;
+    if (R <= L) return; 
+    P = arr[R];
+    for(int i=L; i<=R; i++)
+    {
+        rel++;
+        if (arr[i] <= P) swap(ref arr[++m], ref arr[i]);
+    }
+
+    QuickSort(L, m-1);
+    QuickSort(m+1, R);
+}
+
+void MergeSort(int[] arr, int L, int R)
+{
+    if (R <= L) return;
+    int M = (R + L) / 2;
+    MergeSort(arr, L, M);
+    MergeSort(arr, M+1, R);
+    Merge(arr, L, M, R);
+}
+
+void Merge(int[] arr, int L, int M, int R)
+{
+    int[] tArr = new int[R - L + 1];
+    int i = L;
+    int j = M+1;
+    int t = 0;
+    while (i <= M && j <= R)
+    {
+        rel++;
+        assign ++;
+        if (cmp(arr[i], arr[j]))
+            tArr[t++] = arr[j++];
+        else
+            tArr[t++] = arr[i++];
+    }
+    while (i <= M)
+    {
+        assign++;
+        tArr[t++] = arr[i++];
+    }
+    while (j <= R)
+    {
+        assign++;
+        tArr[t++] = arr[j++];
+    }
+    for (int k = L; k <= R; k++)
+    {
+        assign++;
+        arr[k] = tArr[k - L];
+    }
+}
+
+
+
+// метод последовательно вызывает все необходимые методы сортировки
+void AllSort(int[] arr, int N)
+{
 
     StartStat();
-    HeapSort(A);
+    MergeSort(arr, 0, arr.Length-1);
+    EndStat("MergeSort", N);
+
+    StartStat();
+    QuickSort(0, arr.Length - 1);
+    EndStat("QuickSort", N);
+
+    StartStat();
+    HeapSort(arr);
     EndStat("HeapSort", N);
 
     StartStat();
-    SelectionSort(A);
+    SelectionSort(arr);
     EndStat("SelectionSort", N);
 
     StartStat();
-    ShellSort(A);
+    ShellSort(arr);
     EndStat("ShellSort", N);
 
     StartStat();
-    BubbleSort(A);
+    BubbleSort(arr);
     EndStat("BubbleSort", N);
 
     StartStat();
-    InsertionSort(A);
+    InsertionSort(arr);
     EndStat("InsertionSort", N);
 
     StartStat();
-    InsertionShiftSort(A);
+    InsertionShiftSort(arr);
     EndStat("InsertionShiftSort", N);
 
     StartStat();
-    InsertionShiftLogSort(A);
+    InsertionShiftLogSort(arr);
     EndStat("InsertionShiftLogSort", N);
 }
 
-for(int i = 0; i < N/2; i++)
-{
-    swap(ref A[i], ref A[N - i - 1]);   
-}
-
-for (int i = 0; i < N; i++)
-{
-    copyA[i] = A[i];
-}
-
-{
-    A = new int[N];
-    Console.WriteLine("---- Обратно отсортированный массив ----");
-
-    StartStat();
-    HeapSort(A);
-    EndStat("HeapSort", N);
-
-    StartStat();
-    SelectionSort(A);
-    EndStat("SelectionSort", N);
-
-    StartStat();
-    ShellSort(A);
-    EndStat("ShellSort", N);
-
-    StartStat();
-    BubbleSort(A);
-    EndStat("BubbleSort", N);
-
-    StartStat();
-    InsertionSort(A);
-    EndStat("InsertionSort", N);
-
-    StartStat();
-    InsertionShiftSort(A);
-    EndStat("InsertionShiftSort", N);
-
-    StartStat();
-    InsertionShiftLogSort(A);
-    EndStat("InsertionShiftLogSort", N);
-}
-
+// функции сортировки
 void HeapSort(int[] arr)
 {
     for (int i = arr.Length / 2 - 1; i >= 0; i--)
@@ -139,20 +144,6 @@ void HeapSort(int[] arr)
         swap(ref arr[j], ref arr[0]);
         heapify(arr, 0, j);
     }
-
-}
-
-void heapify(int[] arr, int root, int N)
-{
-    int L = 2 * root + 1;
-    int R = 2 * root + 2;
-    int P = root / 2 - 1;
-    int X = root;
-    if (L < N && cmp(arr[L], arr[X])) X = L;
-    if (R < N && cmp(arr[R], arr[X])) X = R;
-    if (X == root) return;
-    swap(ref arr[X], ref arr[root]);
-    heapify(arr, X, N);
 
 }
 
@@ -238,6 +229,7 @@ void InsertionShiftLogSort(int[] arr)
     }
 }
 
+// вспомогательные методы
 int findMaxIndex(int[] arr, int N)
 {
     int res = 0;
@@ -273,6 +265,27 @@ void swap(ref int a, ref int b)
     assign += 3;
 }
 
+bool cmp(int a, int b)
+{
+    rel++;
+    return (a > b);
+}
+
+void heapify(int[] arr, int root, int N)
+{
+    int L = 2 * root + 1;
+    int R = 2 * root + 2;
+    int P = root / 2 - 1;
+    int X = root;
+    if (L < N && cmp(arr[L], arr[X])) X = L;
+    if (R < N && cmp(arr[R], arr[X])) X = R;
+    if (X == root) return;
+    swap(ref arr[X], ref arr[root]);
+    heapify(arr, X, N);
+
+}
+
+// сервисные методы
 int[] createRandomArr(int N)
 {
     int[] res=new int[N];
@@ -290,14 +303,18 @@ void StartStat()
     stopWatch.Restart();
 }
 
-void EndStat(string metName, int i)
+void EndStat(string metName, int N)
 {
     stopWatch.Stop();
-    Console.WriteLine(metName + "(" + i + "): time: " + stopWatch.ElapsedMilliseconds + " ms; Assignment: " + assign + " Relation: " + rel);
+    Console.WriteLine(metName + "(" + N + "): time: " + stopWatch.ElapsedMilliseconds + " ms; Assignment: " + assign + " Relation: " + rel);
+    PrintArr(A);
 }
 
-bool cmp(int a, int b)
+void PrintArr(int[] arr)
 {
-    rel++;
-    return (a > b);
+    if(!printArray) return;
+    for(int j=0; j < A.Length; j++) Console.Write(arr[j]+"\t");
+    Console.WriteLine();
+    Console.WriteLine();
+    Console.ReadKey();
 }
